@@ -24,8 +24,8 @@ autoinstall:
     timezone: Europe/Minsk
     users:
       - name: ubuntu
-        # mkpasswd --method=SHA-512 --rounds=4096
-        passwd: "$6$rounds=4096$4SY5kMDOITTy3R6s$vgp01IwfMWJRYxY1pa.D6xS.TEzGkMpVqxZtxPQrYuHzvywq2sSw/Z.yEmG3hsWnERCorBbN7tdMttVTcj4u61"
+        # mkpasswd --method=SHA-512 --rounds=4096 --salt="salt0123"
+        passwd: "$6$rounds=4096$salt0123$zJmRuA.9eTs5Pe7PLYrTlmtt.ufSc30sqts19MywN84G2ksqhWKhKkvk3rG/UuXxKbX7XqqT/9pk0uKjcsTmJ1"
         groups: [adm, sudo]
         lock-passwd: false
         sudo: ALL=(ALL) NOPASSWD:ALL

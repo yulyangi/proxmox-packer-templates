@@ -13,19 +13,19 @@ packer {
 }
 
 source "proxmox-iso" "ubuntu-24-04-1" {
-  proxmox_url = "${var.proxmox_api_url}"               # PROXMOX_URL
-  username    = "${var.proxmox_api_token_id}"          # PROXMOX_USERNAME
+  proxmox_url = "${var.proxmox_api_url}"      # PROXMOX_URL
+  username    = "${var.proxmox_api_token_id}" # PROXMOX_USERNAME
   # password    = "${var.proxmox_password}"              # PROXMOX_PASSWORD
-  token       = "${var.proxmox_api_token_secret}"      # PROXMOX_TOKEN
+  token = "${var.proxmox_api_token_secret}" # PROXMOX_TOKEN
 
   insecure_skip_tls_verify = true
 
-  node                 = "pve1"
+  node = "pve1"
   # pool                 = ""
-  task_timeout         = "1m"
-  vm_name              = "ubuntu-24.04.1"
+  task_timeout = "1m"
+  vm_name      = "ubuntu-24.04.1"
   # vm_id                = "999"
-  template_name        = "ubuntu-24.04.1"
+  template_name        = "ubuntu-24.04-${var.cores}-${var.memory}M-${var.disk_size}"
   tags                 = "ubuntu-noble-numbat;template"
   template_description = "Noble Numbat"
   os                   = "l26"
@@ -56,20 +56,20 @@ source "proxmox-iso" "ubuntu-24-04-1" {
   disable_kvm = false
 
   disks {
-    disk_size              = "20G"
-    format                 = "raw"
-    storage_pool           = "local-zfs"
-    type                   = "virtio"
-    cache_mode             = "none"
-    io_thread              = false
-    exclude_from_backup    = false
+    disk_size           = "${var.disk_size}"
+    format              = "raw"
+    storage_pool        = "local-zfs"
+    type                = "virtio"
+    cache_mode          = "none"
+    io_thread           = false
+    exclude_from_backup = false
   }
 
-  cores = "1"
+  cores = "${var.cores}"
   # cpu_type = "kvm64"
   # sockets = "1"
 
-  memory = "2048"
+  memory = "${var.memory}"
   # ballooning_minimum = ""
 
   # vga {
@@ -103,7 +103,7 @@ source "proxmox-iso" "ubuntu-24-04-1" {
 
   cloud_init              = true
   cloud_init_storage_pool = "local-zfs"
-  cloud_init_disk_type = "scsi"
+  cloud_init_disk_type    = "scsi"
 
   boot_command = [
     "<esc><wait>",
@@ -128,7 +128,7 @@ source "proxmox-iso" "ubuntu-24-04-1" {
   ssh_username = "ubuntu"
 
   # (Option 1) Add your Password here
-  ssh_password = "ubuntu"
+  ssh_password = "${var.ssh_password}"
   # - or -
   # (Option 2) Add your Private SSH KEY file here
   # ssh_private_key_file = "~/.ssh/id_rsa"

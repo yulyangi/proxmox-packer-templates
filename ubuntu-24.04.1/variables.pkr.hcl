@@ -13,3 +13,23 @@ variable "proxmox_api_token_secret" {
   sensitive = true
   default   = ""
 }
+
+variable "cores" {
+  type    = string
+  default = "2"
+}
+
+variable "memory" {
+  type    = string
+  default = "2048"
+}
+
+variable "disk_size" {
+  type    = string
+  default = "20G"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = ""
+}

@@ -1,6 +1,5 @@
-# Debian 12.8.0
 # https://developer.hashicorp.com/packer/integrations/hashicorp/proxmox/latest/components/builder/iso
-# Packer Template to create an Debian Server 12.8.0 (Bookworm) on Proxmox
+# based on https://github.com/ChristianLempa/boilerplates/blob/main/packer/proxmox/ubuntu-server-noble/ubuntu-server-noble.pkr.hcl
 
 # Resource Definition for the VM Template
 
@@ -14,9 +13,6 @@ packer {
 }
 
 source "proxmox-iso" "ubuntu-24-04-1" {
-
-
-
   proxmox_url = "${var.proxmox_api_url}"               # PROXMOX_URL
   username    = "${var.proxmox_api_token_id}"          # PROXMOX_USERNAME
   # password    = "${var.proxmox_password}"              # PROXMOX_PASSWORD

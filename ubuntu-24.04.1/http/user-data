@@ -19,11 +19,14 @@ autoinstall:
       name: direct
     swap:
       size: 0
+  # /etc/netplan/50-cloud-init.yaml
   # network:
   #   version: 2
   #   ethernets:
-  #     ens18:
+  #     eth0:
   #       dhcp4: true
+  #       dhcp6: true
+  #       set-name: eth0
   user-data:
     package_upgrade: false
     timezone: Europe/Minsk

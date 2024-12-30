@@ -21,7 +21,7 @@ variable "cores" {
 
 variable "memory" {
   type    = string
-  default = "4096"
+  default = "6144"
 }
 
 variable "disk_size" {

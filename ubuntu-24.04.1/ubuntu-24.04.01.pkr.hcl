@@ -170,4 +170,9 @@ build {
     inline = ["sudo cp /tmp/99-pve.cfg /etc/cloud/cloud.cfg.d/99-pve.cfg"]
   }
 
+  # # Provisioning the VM Template as Kubernetes node in Proxmox #4
+  # provisioner "shell" {
+  #   script = "files/k8s-installations.sh"
+  # }
+
 }

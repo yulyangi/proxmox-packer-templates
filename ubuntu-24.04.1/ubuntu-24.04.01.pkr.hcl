@@ -24,7 +24,7 @@ source "proxmox-iso" "ubuntu" {
   task_timeout         = "1m"
   vm_name              = "ubuntu-${var.code_name}-${var.ubuntu_version}"
   template_name        = "ubuntu-${var.code_name}-${var.ubuntu_version}-${var.cores}-${var.memory}M-${var.disk_size}"
-  tags                 = "${var.code_name}-${var.ubuntu_version};template"
+  tags                 = "ubuntu;template"
   template_description = "${var.code_name}-${var.ubuntu_version}"
   os                   = "l26"
   # vm_id               = "999"
@@ -40,12 +40,12 @@ source "proxmox-iso" "ubuntu" {
 
   boot_iso {
     type             = "scsi"
-    # iso_file         = "local:iso/ubuntu-24.04.1-live-server-amd64.iso"
-    # iso_checksum     = "sha256:e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
+    iso_file         = "local:iso/ubuntu-24.04.1-live-server-amd64.iso"
+    iso_checksum     = "sha256:e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
     unmount          = true
-    iso_url          = "https://releases.ubuntu.com/${var.code_name}/ubuntu-${var.ubuntu_version}-live-server-amd64.iso"
-    iso_checksum     = "d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
-    iso_storage_pool = "local"
+    # iso_url          = "https://releases.ubuntu.com/${var.code_name}/ubuntu-${var.ubuntu_version}-live-server-amd64.iso"
+    # iso_checksum     = "d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
+    # iso_storage_pool = "local"
   }
 
   qemu_agent = true

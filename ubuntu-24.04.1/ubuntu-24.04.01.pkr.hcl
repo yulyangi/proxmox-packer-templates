@@ -117,7 +117,7 @@ source "proxmox-iso" "ubuntu" {
     "<f10><wait>"
   ]
 
-  boot      = "cdn"
+  boot      = "c"
   boot_wait = "5s"
   # boot_key_interval = "1h5m2s"
 

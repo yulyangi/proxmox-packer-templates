@@ -2,12 +2,12 @@
 
 ## Usage
 
-### Before run please put your proxmox token in `variables.pkrvars.hcl`
+### Before run please create `variables.pkrvars.hcl`
 
 ### Example of `variables.pkrvars.hcl`
 
 ```hcl
-proxmox_api_token_secret = "xyz"
+proxmox_api_token_secret = "<your_token_here>"
 ssh_username = "ubuntu"
 ssh_password = "ubuntu"
 code_name = "noble"

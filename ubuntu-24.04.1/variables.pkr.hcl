@@ -41,10 +41,10 @@ variable "disk_size" {
 
 variable "ssh_username" {
   type    = string
-  default = ""
+  default = "ubuntu"
 }
 
 variable "ssh_password" {
   type    = string
-  default = ""
+  default = "ubuntu"
 }

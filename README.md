@@ -6,9 +6,12 @@
 
 ### Example of `variables.pkrvars.hcl`
 
-```
+```hcl
 proxmox_api_token_secret = "xyz"
-ubuntu_version = "noble"
+ssh_username = "ubuntu"
+ssh_password = "ubuntu"
+code_name = "noble"
+ubuntu_version = "24.04.2"
 cores = "1"
 memory = "2048"
 disk_size = "40G"

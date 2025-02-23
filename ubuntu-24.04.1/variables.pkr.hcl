@@ -14,6 +14,16 @@ variable "proxmox_api_token_secret" {
   default   = ""
 }
 
+variable code_name {
+  type      = string
+  default   = "noble"
+}
+
+variable ubuntu_version {
+  type      = string
+  default   = "24.04.2"
+}
+
 variable "cores" {
   type    = string
   default = "2"
@@ -27,6 +37,11 @@ variable "memory" {
 variable "disk_size" {
   type    = string
   default = "20G"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = ""
 }
 
 variable "ssh_password" {

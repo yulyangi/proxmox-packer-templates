@@ -12,24 +12,24 @@ packer {
   }
 }
 
-source "proxmox-iso" "ubuntu-24-04-1" {
+source "proxmox-iso" "ubuntu" {
   proxmox_url = "${var.proxmox_api_url}"      # PROXMOX_URL
   username    = "${var.proxmox_api_token_id}" # PROXMOX_USERNAME
-  # password    = "${var.proxmox_password}"              # PROXMOX_PASSWORD
-  token = "${var.proxmox_api_token_secret}" # PROXMOX_TOKEN
+  # password    = "${var.proxmox_password}"   # PROXMOX_PASSWORD
+  token = "${var.proxmox_api_token_secret}"   # PROXMOX_TOKEN
 
   insecure_skip_tls_verify = true
 
-  node = "pve1"
-  # pool                 = ""
-  task_timeout = "1m"
-  vm_name      = "ubuntu-24.04.1"
-  # vm_id                = "999"
-  template_name        = "ubuntu-24.04-${var.cores}-${var.memory}M-${var.disk_size}"
-  tags                 = "ubuntu-noble-numbat;template"
-  template_description = "Noble Numbat"
+  node                 = "pve1"
+  task_timeout         = "1m"
+  vm_name              = "ubuntu-${var.code_name}-${var.ubuntu_version}"
+  template_name        = "ubuntu-${var.code_name}-${var.ubuntu_version}-${var.cores}-${var.memory}M-${var.disk_size}"
+  tags                 = "${var.code_name}-${var.ubuntu_version};template"
+  template_description = "${var.code_name}-${var.ubuntu_version}"
   os                   = "l26"
-  # bios                 = "seabios"
+  # vm_id               = "999"
+  # pool                 = "rpool"
+  # bios                = "seabios"
 
   # efi_config {
   #   efi_storage_pool  = "local",
@@ -40,10 +40,12 @@ source "proxmox-iso" "ubuntu-24-04-1" {
 
   boot_iso {
     type             = "scsi"
-    iso_storage_pool = "local"
-    iso_file         = "local:iso/ubuntu-24.04.1-live-server-amd64.iso"
+    # iso_file         = "local:iso/ubuntu-24.04.1-live-server-amd64.iso"
+    # iso_checksum     = "sha256:e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
     unmount          = true
-    iso_checksum     = "sha256:e240e4b801f7bb68c20d1356b60968ad0c33a41d00d828e74ceb3364a0317be9"
+    iso_url          = "https://releases.ubuntu.com/${var.code_name}/ubuntu-${var.ubuntu_version}-live-server-amd64.iso"
+    iso_checksum     = "d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
+    iso_storage_pool = "local"
   }
 
   qemu_agent = true
@@ -56,10 +58,11 @@ source "proxmox-iso" "ubuntu-24-04-1" {
   disable_kvm = false
 
   disks {
+    type                = "virtio"
+    storage_pool        = "local-zfs"
+
     disk_size           = "${var.disk_size}"
     format              = "raw"
-    storage_pool        = "local-zfs"
-    type                = "virtio"
     cache_mode          = "none"
     io_thread           = false
     exclude_from_backup = false
@@ -114,7 +117,7 @@ source "proxmox-iso" "ubuntu-24-04-1" {
     "<f10><wait>"
   ]
 
-  boot      = "c"
+  boot      = "cdn"
   boot_wait = "5s"
   # boot_key_interval = "1h5m2s"
 
@@ -125,7 +128,7 @@ source "proxmox-iso" "ubuntu-24-04-1" {
   # http_port_min = 8802
   # http_port_max = 8802
 
-  ssh_username = "ubuntu"
+  ssh_username = "${var.ssh_username}"
 
   # (Option 1) Add your Password here
   ssh_password = "${var.ssh_password}"
@@ -141,7 +144,7 @@ source "proxmox-iso" "ubuntu-24-04-1" {
 build {
 
   name    = "ubuntu-noble-numbat"
-  sources = ["proxmox-iso.ubuntu-24-04-1"]
+  sources = ["proxmox-iso.ubuntu"]
 
   # Provisioning the VM Template for Cloud-Init Integration in Proxmox #1
   provisioner "shell" {

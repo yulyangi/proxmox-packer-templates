@@ -5,7 +5,7 @@ variable "proxmox_api_url" {
 
 variable "proxmox_api_token_id" {
   type    = string
-  default = "packer@pve!packer-token"
+  default = ""
 }
 
 variable "proxmox_api_token_secret" {

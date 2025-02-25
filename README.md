@@ -7,6 +7,7 @@
 ### Example of `variables.pkrvars.hcl`
 
 ```hcl
+proxmox_api_token_id = "<your_token_id>"
 proxmox_api_token_secret = "<your_token_here>"
 ssh_username = "ubuntu"
 ssh_password = "ubuntu"

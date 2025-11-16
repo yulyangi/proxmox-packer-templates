@@ -1,7 +1,4 @@
 # https://developer.hashicorp.com/packer/integrations/hashicorp/proxmox/latest/components/builder/iso
-# based on https://github.com/ChristianLempa/boilerplates/blob/main/packer/proxmox/ubuntu-server-noble/ubuntu-server-noble.pkr.hcl
-
-# Resource Definition for the VM Template
 
 packer {
   required_plugins {
@@ -12,20 +9,70 @@ packer {
   }
 }
 
+variable "proxmox_host" {
+  type = string
+}
+
+variable "storage_pool" {
+  type    = string
+  default = "local-lvm"
+}
+
+variable "proxmox_api_user" {
+  type = string
+}
+
+variable "proxmox_api_token" {
+  type      = string
+  sensitive = true
+}
+
+variable iso_file {
+  type = string
+}
+
+variable iso_sha {
+  type = string
+}
+
+variable "cores" {
+  type    = string
+  default = "1"
+}
+
+variable "memory" {
+  type    = string
+  default = "2048"
+}
+
+variable "disk_size" {
+  type    = string
+  default = "20G"
+}
+
+variable "ssh_username" {
+  type    = string
+  default = "ubuntu"
+}
+
+variable "ssh_password" {
+  type    = string
+  default = "ubuntu"
+}
+
 source "proxmox-iso" "ubuntu" {
-  proxmox_url = "${var.proxmox_api_url}"      # PROXMOX_URL
-  username    = "${var.proxmox_api_token_id}" # PROXMOX_USERNAME
-  # password    = "${var.proxmox_password}"   # PROXMOX_PASSWORD
-  token = "${var.proxmox_api_token_secret}"   # PROXMOX_TOKEN
+  proxmox_url = "https://${var.proxmox_host}/api2/json" # PROXMOX_URL
+  username    = "${var.proxmox_api_user}"               # PROXMOX_USERNAME
+  token       = "${var.proxmox_api_token}"              # PROXMOX_TOKEN
 
   insecure_skip_tls_verify = true
 
-  node                 = "pve1"
+  node                 = "pve"
   task_timeout         = "1m"
-  vm_name              = "ubuntu-${var.code_name}-${var.ubuntu_version}"
-  template_name        = "ubuntu-${var.code_name}-${var.ubuntu_version}-${var.cores}-${var.memory}M-${var.disk_size}"
+  vm_name              = "ubuntu-noble-24.04"
+  template_name        = "ubuntu-noble-24.04-${var.cores}-${var.memory}M-${var.disk_size}"
   tags                 = "ubuntu;template"
-  template_description = "${var.code_name}-${var.ubuntu_version}"
+  template_description = "noble-24.04"
   os                   = "l26"
   # vm_id               = "999"
   # pool                 = "rpool"
@@ -40,12 +87,20 @@ source "proxmox-iso" "ubuntu" {
 
   boot_iso {
     type             = "scsi"
-    iso_file         = "local:iso/ubuntu-24.04.2-live-server-amd64.iso"
-    iso_checksum     = "sha256:d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
+    iso_file         = "${var.iso_file}"
+    iso_checksum     = "${var.iso_sha}"
     unmount          = true
-    # iso_url          = "https://releases.ubuntu.com/${var.code_name}/ubuntu-${var.ubuntu_version}-live-server-amd64.iso"
-    # iso_checksum     = "d6dab0c3a657988501b4bd76f1297c053df710e06e0c3aece60dead24f270b4d"
-    # iso_storage_pool = "local"
+    iso_storage_pool = "local"
+  }
+
+  additional_iso_files {
+    cd_files = [
+      "./http/meta-data",
+      "./http/user-data"
+    ]
+    cd_label         = "cidata"
+    iso_storage_pool = "local"
+    unmount          = true
   }
 
   qemu_agent = true
@@ -58,8 +113,8 @@ source "proxmox-iso" "ubuntu" {
   disable_kvm = false
 
   disks {
-    type                = "virtio"
-    storage_pool        = "local-zfs"
+    type         = "virtio"
+    storage_pool = "${var.storage_pool}"
 
     disk_size           = "${var.disk_size}"
     format              = "raw"
@@ -84,7 +139,7 @@ source "proxmox-iso" "ubuntu" {
     model    = "virtio"
     bridge   = "vmbr0"
     firewall = "false"
-    mtu      = 0
+    mtu      = 1
     # mac_address = ""
     # vlan_tag = "yes"
   }
@@ -103,18 +158,15 @@ source "proxmox-iso" "ubuntu" {
   #   x_vga         = false
   # }
 
-
   cloud_init              = true
-  cloud_init_storage_pool = "local-zfs"
+  cloud_init_storage_pool = "${var.storage_pool}"
   cloud_init_disk_type    = "scsi"
 
   boot_command = [
-    "<esc><wait>",
-    "e<wait>",
-    "<down><down><down><end>",
-    "<bs><bs><bs><bs><wait>",
-    "autoinstall ds=nocloud-net\\;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<wait>",
-    "<f10><wait>"
+    "c", "<wait3s>",
+    "linux /casper/vmlinuz --- autoinstall s=/cidata/", "<enter><wait3s>",
+    "initrd /casper/initrd", "<enter><wait3s>",
+    "boot", "<enter>"
   ]
 
   boot      = "c"
@@ -134,7 +186,7 @@ source "proxmox-iso" "ubuntu" {
   ssh_password = "${var.ssh_password}"
   # - or -
   # (Option 2) Add your Private SSH KEY file here
-  # ssh_private_key_file = "~/.ssh/id_rsa"
+  # ssh_private_key_file = "~/.ssh/id_ed25519_proxmox"
 
   # Raise the timeout, when installation takes longer
   ssh_timeout = "20m"

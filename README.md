@@ -1,34 +1,29 @@
-# Packer Templates for Proxmox Virtual Environment
+# Proxmox Packer Templates
 
-## Usage
+A collection of Packer templates for creating Proxmox Virtual Environment VM templates.
 
-### Before run please create `variables.pkrvars.hcl`
+## 📋 Prerequisites
 
-### Example of `variables.pkrvars.hcl`
+- Proxmox VE 7.0 or later
+- Packer 1.7.0 or later
+- Proxmox API access with appropriate permissions
+- The iso file needs to be manually downloaded
 
-```hcl
-proxmox_api_token_id = "<your_token_id>"
-proxmox_api_token_secret = "<your_token_here>"
-ssh_username = "ubuntu"
-ssh_password = "ubuntu"
-code_name = "noble"
-ubuntu_version = "24.04.2"
-cores = "1"
-memory = "2048"
-disk_size = "40G"
-```
+## 🚀 Quick Start
 
-### Install required plugin
+### 1. Install Required Packer Plugin
 
 ```bash
 packer plugins install github.com/hashicorp/proxmox
 ```
 
-### Create a template
+### 2. Create a template
+
+Update `variables.pkrvars.hcl` as needed.
 
 ```bash
-cd ubuntu-24.04.1/
-packer build --var-file variables.pkrvars.hcl .
+cd ubuntu-24.04
+packer build -var-file variables.pkrvars.hcl .
 ```
 
-To create a VM Template prepared for running as k8s node uncomment [this](https://github.com/yulyangi/proxmox-packer-templates/blob/master/ubuntu-24.04.1/ubuntu-24.04.01.pkr.hcl#L173-L176) block of code
+To create a VM Template prepared for running as k8s node uncomment `k8s-installations.sh` block of code

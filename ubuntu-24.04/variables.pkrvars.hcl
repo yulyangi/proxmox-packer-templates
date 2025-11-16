@@ -1,0 +1,10 @@
+proxmox_host      = "192.168.0.100:8006"
+proxmox_node      = "pve"
+proxmox_api_user  = "packer@pam!packer" #user@pve!tokenid
+proxmox_api_token = <token_here>
+iso_file          = "local:iso/ubuntu-24.04.3-live-server-amd64.iso"
+iso_sha           = "sha256:c3514bf0056180d09376462a7a1b4f213c1d6e8ea67fae5c25099c6fd3d8274b"
+cores             = "1"
+memory            = "2048"
+disk_size         = "30G"
+storage_pool      = "local-lvm"
